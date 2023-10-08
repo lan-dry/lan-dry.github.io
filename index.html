@@ -1,34 +1,38 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-        <title>Data Visualization with A-Frame</title>
+        <title>D3.js and AR Example</title>
+        <script src="https://d3js.org/d3.v6.min.js"></script>
         <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-        <style>
-            body {
-                margin: 0;
-                overflow: hidden;
-            }
-
-            .bar {
-                animation: barAnimation;
-                animation-duration: 1000ms;
-            }
-
-            @keyframes barAnimation {
-                from { height: 0; }
-                to { height: var(--data-value); }
-            }
-
-        </style>
+        <script src="https://raw.githack.com/jeromeetienne/AR.js/3.3.1/aframe/build/aframe-ar.js"></script>
     </head>
     <body>
-        <a-scene>
-            <!-- A-Frame entities for the 3D bar chart -->
-            <!-- Add bars for each data point -->
-            <a-entity position="-2 0 -3" data-value="10" class="bar" color="red" height="10" depth="1"></a-entity>
-            <a-entity position="0 0 -3" data-value="15" class="bar" color="green" height="15" depth="1"></a-entity>
-            <a-entity position="2 0 -3" data-value="8" class="bar" color="blue" height="8" depth="1"></a-entity>
+        <a-scene embedded arjs>
+            <a-scene embedded arjs>
+                <a-plane position="0 0 0" rotation="-90 0 0" width="10" height="10" color="#7BC8A4"></a-plane>
+                <a-camera-static></a-camera-static>
+            </a-scene>
         </a-scene>
+
+        <script>
+            function createBarChart(data) {
+              const svg = d3.select('a-scene').append('svg')
+                .attr('width', 5)
+                .attr('height', 5);
+        
+              const bars = svg.selectAll('rect')
+                .data(data)
+                .enter().append('rect')
+                .attr('x', (d, i) => i * 1.2)
+                .attr('y', 0)
+                .attr('width', 1)
+                .attr('height', d => d)
+                .attr('color', 'steelblue');
+            }
+        
+            const data = [1, 2, 3, 4, 5];  // Sample data for the bar chart
+            createBarChart(data);
+          </script>
+        
     </body>
 </html>
